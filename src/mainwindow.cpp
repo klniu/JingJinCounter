@@ -15,12 +15,19 @@ void MainWindow::loadUi() {
     bindShortcut();
     loadSettings();
     qmlObj->setProperty("counterValue", counter);
+    QObject::connect(qmlObj, SIGNAL(counterResetSignal()), this, SLOT(counterResetSlot()));
+}
+
+void MainWindow::counterResetSlot()
+{
+   counter = 0;
+   qmlObj->setProperty("counterValue", counter);
+   saveCounter();
 }
 
 void MainWindow::bindShortcut()
 {
     auto hotkey = new QHotkey(QKeySequence("F22"), true, qApp);//The hotkey will be automatically registered
-    qDebug() << "Is Registered: " << hotkey->isRegistered();
     QObject::connect(hotkey, &QHotkey::activated, qApp, [&](){
         qmlObj->setProperty("counterValue", ++counter);
         saveCounter();
@@ -29,7 +36,7 @@ void MainWindow::bindShortcut()
 
 void MainWindow::loadSettings()
 {
-    counter = settings.value("counter", "").toInt();
+    counter = settings.value("counter", "").toUInt();
 }
 
 void MainWindow::saveSettings()

@@ -13,6 +13,7 @@ public:
 signals:
 
 public slots:
+    void counterResetSlot();
 private:
     void bindShortcut();
     void loadSettings();
@@ -22,7 +23,7 @@ private:
 
 private:
     QSettings settings;
-    int counter = 0;
+    uint counter = 0;
     QObject *qmlObj;
 };
 

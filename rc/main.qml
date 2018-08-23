@@ -1,11 +1,15 @@
 import QtQuick 2.11
 import QtQuick.Controls 1.4
 import QtQuick.Window 2.0
+import QtQuick.Dialogs 1.1
 
 ApplicationWindow {
 	id: root
 	visible: true
+
     property int counterValue: 0
+    signal counterResetSignal()
+
     width: getReactWidth(counterValue)
 	height: 40
 	x: Screen.width - width
@@ -46,16 +50,56 @@ ApplicationWindow {
     }
 
 	MouseArea {
-		anchors.fill: parent
-		property int mx: 0
-		property int my: 0
-		onPressed: {
-			mx = mouseX
-			my = mouseY
-		}
-		onPositionChanged: {
-			root.x += mouseX - mx
-			root.y += mouseY - my
-		}
-	}
+        anchors.fill: parent
+        property int mx: 0
+        property int my: 0
+        onPressed: {
+            if(mouse.button == Qt.LeftButton) {
+                mx = mouseX
+                my = mouseY
+            }
+        }
+
+        onPositionChanged: {
+            root.x += mouseX - mx
+            root.y += mouseY - my
+        }
+
+        onClicked: {
+            if(mouse.button == Qt.RightButton) {
+                contextMenu.popup()
+            }
+        }
+
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+        Menu {
+            id: contextMenu
+            MenuItem {
+                text: qsTr("Reset")
+                onTriggered: resetDialog.open()
+            }
+            MenuItem {
+                text: qsTr("Quit")
+                iconName: "edit-copy"
+                onTriggered: quitDialog.open()
+            }
+        }
+        MessageDialog {
+            id: quitDialog
+            title: "Quit"
+            text: "Are you sure to quit?"
+            onAccepted: {
+                Qt.quit()
+            }
+        }
+        MessageDialog {
+            id: resetDialog
+            title: "Counter Reset"
+            text: "The saved count will be clear. Are you sure?"
+            onAccepted: {
+                root.counterResetSignal()
+            }
+        }
+    }
 }

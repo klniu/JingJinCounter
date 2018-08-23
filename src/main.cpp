@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QQmlComponent>
 #include <QQmlEngine>
+#include <QObject>
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,8 @@ int main(int argc, char *argv[])
 
     MainWindow mainWindow(qmlObj);
     mainWindow.loadUi();
+
+    QObject::connect(&engine, &QQmlEngine::quit, &QGuiApplication::quit);
 
 //    if ( !globalShortcut.isValid() ) {
 //        qDebug() << QString("Error: Failed to set shortcut %1")
