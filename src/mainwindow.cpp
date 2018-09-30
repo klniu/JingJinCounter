@@ -27,7 +27,7 @@ void MainWindow::counterResetSlot()
 
 void MainWindow::bindShortcut()
 {
-    auto hotkey = new QHotkey(QKeySequence("F22"), true, qApp);//The hotkey will be automatically registered
+    auto hotkey = new QHotkey(QKeySequence("F13"), true, qApp);//The hotkey will be automatically registered
     QObject::connect(hotkey, &QHotkey::activated, qApp, [&](){
         qmlObj->setProperty("counterValue", ++counter);
         saveCounter();
