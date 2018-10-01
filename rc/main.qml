@@ -13,7 +13,7 @@ ApplicationWindow {
     width: getReactWidth(counterValue)
 	height: 40
 	x: Screen.width - width
-	y: Screen.height - height
+    y: Screen.height - height - 50
 	flags: Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
 	color: "transparent"
 
