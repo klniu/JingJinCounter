@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/audio">
-        <file>bo1.wav</file>
+        <file>bo.wav</file>
     </qresource>
 </RCC>

@@ -9,6 +9,7 @@ ApplicationWindow {
 
     property int counterValue: 0
     signal counterResetSignal()
+    signal setAlertSignal(int alert)
 
     width: getReactWidth(counterValue)
 	height: 40
@@ -54,7 +55,7 @@ ApplicationWindow {
         property int mx: 0
         property int my: 0
         onPressed: {
-            if(mouse.button == Qt.LeftButton) {
+            if(mouse.button === Qt.LeftButton) {
                 mx = mouseX
                 my = mouseY
             }
@@ -66,7 +67,7 @@ ApplicationWindow {
         }
 
         onClicked: {
-            if(mouse.button == Qt.RightButton) {
+            if(mouse.button === Qt.RightButton) {
                 contextMenu.popup()
             }
         }
@@ -78,6 +79,18 @@ ApplicationWindow {
             MenuItem {
                 text: qsTr("Reset")
                 onTriggered: resetDialog.open()
+            }
+            Menu {
+                title: "Alert"
+
+                MenuItem {
+                    text: "Bo"
+                    onTriggered: root.setAlertSignal(0)
+                }
+                MenuItem {
+                    text: "Zhou"
+                    onTriggered: root.setAlertSignal(1)
+                }
             }
             MenuItem {
                 text: qsTr("Quit")

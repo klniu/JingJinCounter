@@ -17,6 +17,8 @@ void MainWindow::loadUi() {
     loadSettings();
     qmlObj->setProperty("counterValue", counter);
     QObject::connect(qmlObj, SIGNAL(counterResetSignal()), this, SLOT(counterResetSlot()));
+    QObject::connect(qmlObj, SIGNAL(setAlertSignal(int)), this, SLOT(setAlertSlot(int)));
+
 }
 
 void MainWindow::counterResetSlot()
@@ -26,12 +28,24 @@ void MainWindow::counterResetSlot()
    saveCounter();
 }
 
+void MainWindow::setAlertSlot(int alert)
+{
+    this->alert = static_cast<Alert>(alert);
+    if (this->alert == Alert::Zhou) {
+        this->sound = "qrc:/audio/zhou.wav";
+    } else {
+        this->sound = "qrc:/audio/bo.wav";
+    }
+    saveSettings();
+}
+
 void MainWindow::bindShortcut()
 {
     auto hotkey = new QHotkey(QKeySequence("F13"), true, qApp);//The hotkey will be automatically registered
+
     QObject::connect(hotkey, &QHotkey::activated, qApp, [&](){
         qmlObj->setProperty("counterValue", ++counter);
-        QSound::play("qrc:/audio/bo1.wav");
+        QSound::play(this->sound);
         saveCounter();
     });
 }
@@ -39,11 +53,12 @@ void MainWindow::bindShortcut()
 void MainWindow::loadSettings()
 {
     counter = settings.value("counter", "").toUInt();
+    this->alert = static_cast<Alert>(settings.value("alert", Alert::Bo).toUInt());
 }
 
 void MainWindow::saveSettings()
 {
-    settings.setValue("text", "");
+    settings.setValue("alert", this->alert);
 }
 
 void MainWindow::saveCounter()
