@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/audio">
         <file>bo.wav</file>
+        <file>zhou.wav</file>
     </qresource>
 </RCC>
