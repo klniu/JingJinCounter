@@ -135,6 +135,7 @@ void MainWindow::quit()
 void MainWindow::increaseCounter()
 {
     label->setText(QString::number(++counter));
+    adjustWidth();
     QSound::play(this->sound);
     saveCounter();
 }
