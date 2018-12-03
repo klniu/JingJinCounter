@@ -68,36 +68,34 @@ void MainWindow::initActions()
     QAction *resetAct = new QAction(tr("Reset"), this);
     resetAct->setStatusTip(tr("Reset Counter Value"));
     connect(resetAct, &QAction::triggered, this, &MainWindow::counterReset);
-    menu->addAction(resetAct);
+
+    QActionGroup *aGroup = new QActionGroup(this);
+    connect(aGroup, &QActionGroup::triggered, this, &MainWindow::setAlert);
 
     // set audio
-    QAction *boAct = new QAction(tr("Bo"), this);
-    resetAct->setStatusTip(tr("Bo sound"));
-    resetAct->setData(Alert::Bo);
-    resetAct->setCheckable(true);
+    QAction *boAct = new QAction(tr("Bo"), aGroup);
+    boAct->setStatusTip(tr("Bo sound"));
+    boAct->setData(Alert::Bo);
+    boAct->setCheckable(true);
+    boAct->setChecked(alert == Alert::Bo);
 
-    QAction *zhouAct = new QAction(tr("Zhou"), this);
+    QAction *zhouAct = new QAction(tr("Zhou"), aGroup);
     zhouAct->setStatusTip(tr("Zhou sound"));
     zhouAct->setData(Alert::Zhou);
     zhouAct->setCheckable(true);
-
-    QActionGroup *aGroup = new QActionGroup(this);
-    aGroup->setExclusive(true);
-    aGroup->addAction(boAct);
-    aGroup->addAction(zhouAct);
-    boAct->setChecked(alert == Alert::Bo);
     zhouAct->setChecked(alert == Alert::Zhou);
-    connect(aGroup, &QActionGroup::triggered, this, &MainWindow::setAlert);
-
-    QMenu *alertMenu = new QMenu(tr("Alert"), this);
-    alertMenu->addAction(boAct);
-    alertMenu->addAction(zhouAct);
-    menu->addMenu(alertMenu);
 
     // quit action
     QAction *quitAct = new QAction(tr("Quit"), this);
     quitAct->setStatusTip(tr("Quit application"));
     connect(quitAct, &QAction::triggered, this, &MainWindow::quit);
+
+    QMenu *alertMenu = new QMenu(tr("Alert"), this);
+    alertMenu->addAction(boAct);
+    alertMenu->addAction(zhouAct);
+
+    menu->addAction(resetAct);
+    menu->addMenu(alertMenu);
     menu->addAction(quitAct);
 }
 
@@ -142,7 +140,7 @@ void MainWindow::increaseCounter()
 
 int MainWindow::confirmDialog(QString text)
 {
-    QMessageBox msgBox;
+    QMessageBox msgBox(this);
     msgBox.setText(text);
     msgBox.setStandardButtons(QMessageBox::Ok| QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Cancel);
