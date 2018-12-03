@@ -110,7 +110,6 @@ void MainWindow::loadSettings()
     counter = settings.value("counter", "").toUInt();
     alert = static_cast<Alert>(settings.value("alert", Alert::Bo).toUInt());
     setSound(alert);
-//    paintValue(counter);
 }
 
 void MainWindow::saveSettings()
@@ -120,6 +119,9 @@ void MainWindow::saveSettings()
 
 void MainWindow::saveCounter()
 {
+    label->setText(QString::number(counter));
+    adjustWidth();
+    QSound::play(this->sound);
     settings.setValue("counter", counter);
 }
 
@@ -132,9 +134,7 @@ void MainWindow::quit()
 
 void MainWindow::increaseCounter()
 {
-    label->setText(QString::number(++counter));
-    adjustWidth();
-    QSound::play(this->sound);
+    ++counter;
     saveCounter();
 }
 

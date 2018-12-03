@@ -49,7 +49,7 @@ private:
     QLabel *label;
     QPoint windowTopLeftPoint;
     QPoint mouseStartPoint;
-    bool isDrag;
+    bool isDrag = false;
 };
 
 #endif // MAINWINDOW_H
